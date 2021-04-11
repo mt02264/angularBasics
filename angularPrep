@@ -1,0 +1,71 @@
+Angular
+	app.js 
+		has the main app name
+		var appName = angular.module('appName', []);
+		defines the module
+
+	controller.js
+		has the controller instance 
+		appName.controller('controllerName');
+		defines the controller on appName
+
+	views
+
+in HTML
+	ng-app
+		DOM follows the angular app
+		ng-app="appName"
+	ng-controller
+		links this to controller of the appName
+		ng-controller="controllerName"
+	ng-repeat
+		repeater directive
+		loop function in HTML
+		ng-repeat="num in list"
+		we can add a FILTER
+			ng-repeat="phone in $ctrl.phones | filter:$ctrl.query"
+	ng-model 
+		used in html input syntax to attach an input with a variable in js/controller
+	ng-init
+		initialize a list or an array or a variable
+
+Scope
+	allows template, data model and controller to work together
+
+
+To create an application
+	index.html (lay out html page)
+		include all the JS files with script tag
+		add ng-app = "appName" to a DOM 
+		add ng-controller = "moduleNameController" to the subtree in above
+		add a template by moduleName	
+	create app.js
+		initialize/define an app/module
+		var appName = angular.module('appName', [moduleName]);
+	create a moduleName folder
+		create a moduleName.js
+			var moduleName = angular.module('moduleName'l, []);
+		create a moduleName.component.js
+			angular.app('moduleName').componenet('moduleName', {
+				template/templateUrl: "either url to template file or complete template",
+				controller: ['$http', function moduleNameController($http) {
+					var self = this;
+					$http.get('file.json').then(function(response){
+					self.phones = response.data;
+					})
+				}]
+			}
+		create a templateFile for html
+
+
+Dan Angular JS Fundamentals
+	data binding, mvx, routing ,testing, jqLite, Templates, History, Factories, views, viewmodel, controllers, directives, validation, dependency injection
+	
+	Module -> Config function -> Routes -> (Views -> Directives < $scope > Controller -> *Factory)
+
+	How To
+		create a module (an object container)
+		var demoApp = angular.module('demoApp', []);
+			the empty array [] 
+				used for dependency injection
+				might rely on another module 
