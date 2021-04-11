@@ -1,31 +1,66 @@
-
-
 <!doctype html>
-<html lang="en" ng-app='SimpleApp'>
+<html lang="en" ng-app='demoApp'>
   <head>
-    
+    <title>Hello World!</title>
   </head>
   <body >
-    <div data-ng-controller="SimpleController">
-    Name:
-    <br />
-    <input type="text" ng-model="name"/> 
-    <br />
-    <ul>
-      <li ng-repeat="person in customers | filter:name | orderBy:city">{{person.name | uppercase}} - {{person.city}}</li>
-    </ul>
-  </div>
+    <div >
+      <ng-view></ng-view>
+    </div>
 
     <script src="./angular.min.js"></script>
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28//angular-route.min.js"></script>
     <script>
-      var app=angular.module('SimpleApp', []);
-      app.controller('SimpleController', function SimpleController($scope) {
-        $scope.customers = [
-          {name: 'tahir', city: 'phoenix'}, 
-          {name: 'John', city: 'arizona'}, 
-          {name: 'John', city: 'karachi'}
+      var demoApp = angular.module('demoApp', ['ngRoute']);
+
+      demoApp.factory('simpleFactory', function(){
+        var customers = [
+          {name: 'Tahir', city: 'Phoenix'}, 
+          {name: 'John Smith', city: 'Arizona'}, 
+          {name: 'John', city: 'Karachi'}
         ];
+        var factory = {};
+        factory.getCustomers = function(){
+          return customers;
+        };
+        return factory;
+      });
+
+      var controllers = {};
+      controllers.simpleController = function ($scope, simpleFactory) {
+      $scope.customers = [];
+      init();
+      
+      function init(){
+        $scope.customers = simpleFactory.getCustomers();
+      }
+      $scope.addCustomer = function (){
+        $scope.customers.push({ name: $scope.newCustomer.name, city: $scope.newCustomer.city});
+      };
+      };
+      controllers.simpleController2 = function ($scope) {
+        $scope.capitals = [
+        {
+          country: 'Pakistan',
+          capital: 'Islamabad'
+        },
+        {
+          country: 'India',
+          capital: 'New Delhi'
+        }];
+      };
+      demoApp.controller(controllers);
+
+      demoApp.config(function ($routeProvider){
+        $routeProvider.when('/view2',
+          {
+            controller: 'simpleController2',
+            templateUrl: 'template/temp2.html'
+          }).when('/view1',
+          {
+            controller: 'simpleController',
+            templateUrl: 'template/view1.html'
+          }).otherwise({redirectTo: '/view2'});
       });
 
     </script>
